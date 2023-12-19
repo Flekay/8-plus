@@ -1,5 +1,5 @@
-import re
 import time
+import os
 
 def is_reverse_consecutive(s):
     return any(ord(s[i]) - 1 == ord(s[i + 1]) and ord(s[i + 1]) - 1 == ord(s[i + 2]) for i in range(len(s) - 2))
@@ -45,12 +45,15 @@ def valid_password(password):
 
 
 def main():
-    with open("xato-net-10-million-passwords-1000000.txt", "r") as source_file:
-        with open("8-plus.txt", "w") as target_file:
-            for password in source_file:
-                password = password.rstrip("\n")
-                if valid_password(password) == "valid password":
-                    target_file.write(password+"\n")
+    with open("8-plus.txt", "w") as target:
+        for filename in os.listdir("src"):
+            if filename.endswith(".txt"):
+                source_file = os.path.join("src", filename)
+                with open(source_file, "r") as source:
+                    for password in source:
+                        password = password.rstrip("\n")
+                        if valid_password(password) == "valid password":
+                            target.write(password + "\n")
 
 def makePHP():
     with open("8-plus.txt", "r") as source_file:
@@ -64,8 +67,19 @@ def makePHP():
             target_file.write(");\n")
             # target_file.write("?>\n")
 
+def makeSQL():
+    with open("8-plus.txt", "r") as source_file:
+        with open("8-plus.sql", "w") as target_file:
+            target_file.write("INSERT INTO `passwords` (`password`) VALUES\n")
+            for password in source_file:
+                password = password.replace("'", "''")
+                password = password.rstrip("\n")
+                target_file.write("('" + password + "'),\n")
+            target_file.write(";\n")
+
 if __name__ == '__main__':
     start_time = time.time()
     main()
     makePHP()
+    makeSQL()
     print("--- %s seconds ---" % (time.time() - start_time))

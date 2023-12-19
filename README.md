@@ -12,3 +12,7 @@ insecure passwords list
 
 ## additonal recommendations:
 - Not part of your email address (i.e. if your email address is "aaaa@bbbb.com", "aaaa" should not be part of your password)
+
+## custom password list:
+1. add your own passwords list by creating a file in the src folder.
+2. run the purge.py script to remove any passwords that do not meet the requirements.
